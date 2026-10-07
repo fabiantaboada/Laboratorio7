@@ -1,0 +1,113 @@
+package laboratorio;
+
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.JTextArea;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class Lab04 extends JFrame implements ActionListener {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private JLabel lblNewLabel;
+	private JTextField txtS1;
+	private JButton btnNewButton;
+	private JTextArea txtS2;
+	private JTextArea txtS3;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Lab04 frame = new Lab04();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public Lab04() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		{
+			lblNewLabel = new JLabel("Ingrese números separados entre comas:");
+			lblNewLabel.setBounds(101, 11, 227, 14);
+			contentPane.add(lblNewLabel);
+		}
+		{
+			txtS1 = new JTextField();
+			txtS1.setBounds(54, 36, 310, 23);
+			contentPane.add(txtS1);
+			txtS1.setColumns(10);
+		}
+		{
+			btnNewButton = new JButton("Procesar");
+			btnNewButton.addActionListener(this);
+			btnNewButton.setBounds(163, 83, 89, 23);
+			contentPane.add(btnNewButton);
+		}
+		{
+			txtS2 = new JTextArea();
+			txtS2.setEditable(false);
+			txtS2.setBounds(10, 119, 414, 51);
+			contentPane.add(txtS2);
+		}
+		{
+			txtS3 = new JTextArea();
+			txtS3.setEditable(false);
+			txtS3.setBounds(10, 181, 414, 51);
+			contentPane.add(txtS3);
+		}
+
+	}
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btnNewButton) {
+			do_btnNewButton_actionPerformed(e);
+		}
+	}
+	protected void do_btnNewButton_actionPerformed(ActionEvent e) {
+		try {
+			String[] elementos = txtS1.getText().split(",");
+			Integer[] numeros = new Integer[elementos.length];
+			
+			for (int i = 0; i < elementos.length; i++) {
+				numeros[i] = Integer.parseInt(elementos[i].trim());
+			}
+			List<Integer> listaOriginal = List.of(numeros);
+			List<Integer> listaDuplicada = listaOriginal.stream()
+														.map(x -> x * 2)
+														.collect(Collectors.toList());
+			txtS2.setText("Lista Original (Inmutable):\n" + listaOriginal.toString());
+			txtS3.setText("Nueva Lista (Duplicada):\n" + listaDuplicada.toString());
+			
+		} catch (NumberFormatException ex) {
+			JOptionPane.showMessageDialog(this, 
+				"Error: Ingrese únicamente números enteros separados por comas.", 
+				"Error de Formato", 
+				JOptionPane.ERROR_MESSAGE);
+		}
+	}
+}
